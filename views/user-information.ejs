@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= username %>'s information</title>
+    <%- include('link') %>
+    <style>
+        .img-div > img {
+            width: 22%;
+        }
+    </style>
+    <script>
+    </script>
+</head>
+<body>
+    <%- include('nav-for-pages') %>
+    <div class="separate">
+
+    </div>
+    <div class="container-fluid">
+        <div class="container pb-3">
+            <div class="topic text-center py-4">
+                <p class="display-2">Your information</p>
+            </div>
+            <div class="img-div text-center mb-5">
+                <% let firstLetter = username.charAt(0); %>
+                <img src="/user-icon/<%= firstLetter %>.png" alt="user image">
+            </div>
+            <form action="/update-user-information" method="post">
+                <div class="input-group mb-3 w-75 mx-auto">
+                    <span class="input-group-text bg-secondary text-light" id="basic-addon1">ID</span>
+                    <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" value="<%= user_id %>" readonly>
+                </div>
+                <div class="input-group mb-3 w-75 mx-auto">
+                    <span class="input-group-text bg-secondary text-light" id="basic-addon1">Username</span>
+                    <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" value="<%= username %>" readonly>
+                </div>
+                <div class="input-group mb-3 w-75 mx-auto">
+                    <span class="input-group-text bg-secondary text-light" id="basic-addon1">Email</span>
+                    <input type="email" class="form-control" aria-label="Username" aria-describedby="basic-addon1" value="<%= email %>" readonly>
+                </div>
+                <div class="input-group mb-3 w-75 mx-auto">
+                    <span class="input-group-text bg-secondary text-light" id="basic-addon1">Bank account</span>
+                    <input type="text" name="fullName" class="form-control" aria-label="Username" aria-describedby="basic-addon1" value="<%= fullName %>" required>
+                </div>
+                <div class="input-group mb-3 w-75 mx-auto">
+                    <select class="form-select" name="bank" aria-label="Default select example">
+                        <% if(fullName != "") { %>
+                            <% let arr = ["SCB", "KrungThai", "Bangkok", "Kasikorn"] %>
+                            <% for(let b of arr) { %>
+                                <% if(b === bank) { %>
+                                    <option value="<%= bank %>" selected><%= bank %></option>
+                                    <% continue; %>
+                                <% } %>
+                                <option value="<%= b %>"><%= b %></option>
+                            <% } %>
+                        <% }else { %>
+                            <option selected>Choose a Bank</option>
+                            <option value="SCB">SCB</option>
+                            <option value="KrungThai">Krung Thai</option>
+                            <option value="Bangkok">Bangkok</option>
+                            <option value="Kasikorn">Kasikorn</option>
+                        <% } %>
+                    </select>
+                </div>
+                <div class="input-group mb-3 w-75 mx-auto">
+                    <span class="input-group-text bg-secondary text-light" id="basic-addon1">Bank no.</span>
+                    <input type="text" name="bankNumber" class="form-control" aria-label="Username" aria-describedby="basic-addon1" value="<%= bank_number %>" required>
+                </div>
+                <% if(address.length < 3) { %>
+                    <div class="w-75 mx-auto mb-1">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            new address
+                        </button>
+                    </div>
+                <% } %>
+                <div class="mb-3">
+                    <% let i = 1;
+                    for(let a of address) { %>
+                        <div class="input-group mb-1 w-75 mx-auto">
+                            <% let name = "address"+i %>
+                            <span class="input-group-text bg-secondary text-light" id="basic-addon1">Address <%= i %></span>
+                            <textarea style="resize: none;" class="form-control" name="<%= name %>"><%= a.address %></textarea>
+                            <% i++ %>
+                        </div>
+                    <% } %>
+                </div>
+                <div class="input-group mb-3 w-75 mx-auto">
+                    <span class="input-group-text bg-secondary text-light" id="basic-addon1">Tel.</span>
+                    <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1" value="<%= tel %>" readonly>
+                </div>
+                <div class="btn-div mb-3 w-75 mx-auto text-end">
+                    <button class="btn btn-success">Save <img src="/bootstrap-icons/save2.svg"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Add new address</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="/add-new-address" method="post">
+                    <div class="modal-body px-3">
+                        <textarea class="form-control" name="newAddress" style="resize: none;" required></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <%- include('footer') %>
+</body>
+</html>

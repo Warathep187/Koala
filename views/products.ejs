@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%
+    let text = product_category.charAt(0).toUpperCase() + product_category.slice(1);
+    %>
+    <title><%= text.replace(/-/g, " ") %></title>
+    <%- include('link') %>
+    <script src="/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="jquery-ui-1.12.1.custom/jquery-ui.min.css">
+    <style>
+        [name=search] {
+            border-color: #FFC107;
+        }
+        .card > img {
+            height: 200px;
+            object-fit: cover;
+        }
+        .card:hover {
+            box-shadow: .2px .2px 3px #FFC107;
+        }
+    </style>
+    <script>
+        $(function() {
+            $("[name=search]").autocomplete({
+                source: '/search-all'
+            })
+        })
+    </script>
+</head>
+<body>
+    <div class="separate">
+
+    </div>
+    <%- include('nav-for-pages') %>
+    <div class="container-fluid">
+        <div class="container p-4">
+            <div class="search py-2">
+                <form action="/view-search-products" method="get" id="search-form" onSubmit="sub()">
+                    <div class="input-group w-75 mx-auto">
+                        <input type="text" name="search" class="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                        <button class="btn btn-outline-warning" type="button" onClick="sub()" id="button-addon1">🔍</button>
+                    </div>
+                </form>
+                <script>
+                    const sub = () => {
+                        ($('[name=search]').val().trim() == "") ? event.preventDefault() : $("#search-form").submit();
+                    }
+                </script>
+            </div>
+            <div class="cate-div">
+                <p class="display-4 text-center">Category : <%= product_category %></p>
+            </div>
+                <% if(data.length == 0) { %>
+                    <div class="text-center py-3">
+                        <p class="text-danger">No products in <%= product_category %> yet.</p>
+                        <div class="row mx-auto">
+                            <div class="col-lg-4 col-md-6 col-6 mx-auto">
+                                <img class="w-75" src="/another-images/box.png">
+                            </div>
+                        </div>
+                    </div>
+                <% }else { %>
+                    <div class="row">
+                        <% for(let p of data) { %>
+                            <a href="/view-product/<%= p._id %>" style="text-decoration: none" class="col-xl-3 col-lg-4 col-md-6 col-8 my-3">
+                                <div class="card" style="width: 100%;">
+                                    <% for(let i in p.product_image) { %>
+                                        <% if(i == 0) { %>
+                                            <img src="/product-images-uploaded/<%= p.product_image[i] %>" class="card-img-top">
+                                            <% break; %>
+                                        <% } %>
+                                    <% } %>
+                                    <div class="card-body">
+                                        <p class="card-text text-secondary text-break fs-2" id="card-info"><%= p.product_name %></p>
+                                        <% let max=0; min=99999999 %>
+                                        <% if(p.product_type[0].length == 3) { 
+                                            for(let i of p.product_type) {
+                                                if(i[1] > max) {
+                                                    max = i[1];
+                                                }
+                                                if(i[1] < min) {
+                                                    min = i[1];
+                                                }
+                                            }
+                                            if(max === min) { %>
+                                                <p class="text-end fs-5"><%= max %> THB</p>
+                                            <%}else {%>
+                                                <p class="text-end fs-5"><%= min %>-<%= max %> THB</p>
+                                            <% }    
+                                        }else { %>
+                                            <p class="text-end fs-5"><%= p.product_type[0][0] %> THB</p>
+                                        <% } %>
+                                        <p class="text-end text-warning">sold <%= p.product_sold.toLocaleString("en-US") %> pcs.</p>
+                                    </div>
+                                </div>
+                            </a>
+                        <% } %>
+                    </div>
+                <% } %>
+        </div>
+    </div>
+</body>
+</html>

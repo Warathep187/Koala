@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category</title>
+    <%- include('link') %>
+    <script src="/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="jquery-ui-1.12.1.custom/jquery-ui.min.css">
+    <style>
+        [name=search] {
+            border-color: #FFC107;
+        }
+        .card > img {
+            height: 250px;
+            object-fit: cover;
+        }
+        .card-body {
+            text-align: center;
+        }
+        .card:hover {
+            box-shadow: .2px .2px 3px #FFC107;
+        }
+    </style>
+    <script>
+        $(function() {
+            $("[name=search]").autocomplete({
+                source: '/search-all'
+            })
+            "<% if(locals.guest) { %>"
+                setTimeout(() => {
+                    $("#exampleModal").modal("show").on("shown", function () {
+                    });
+                }, 2000)
+            "<% } %>"
+        })
+    </script>
+</head>
+<body>
+    <div class="separate">
+
+    </div>
+    <%- include('nav-for-pages') %>
+    <div class="modal" tabindex="-1" id='exampleModal' style="-webkit-animation: fadeIn 1s; animation: fadeIn 1s;">
+        <div class="modal-dialog">
+            <div class="modal-content" style="border-radius: 30px; opacity: 0.9">
+                <div class="modal-header bg-warning">
+                    <div class="text-center me-2">
+                        <img style="width: 35px;" src="/another-images/koala.png">
+                    </div>
+                    <h5 class="modal-title">Let's go to login</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body py-5">
+                    <div class="my-4 text-center">
+                        <a href="/" style="text-decoration: none;" class="fs-4"><button type="button" class="btn btn-outline-warning w-75">Login</button></a>
+                    </div>
+                    <div class="mb-4 text-center">
+                        <a href="/" style="text-decoration: none;" class="fs-4"><button type="button" class="btn btn-warning w-75">Register</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="container px-4 py-3">
+            <div class="search py-3">
+                <form action="/view-search-products" method="get" id="search-form" onSubmit="sub()">
+                    <div class="input-group w-75 mx-auto">
+                        <input type="text" name="search" class="form-control" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                        <button class="btn btn-outline-warning" type="button" onClick="sub()" id="button-addon1">🔍</button>
+                    </div>
+                </form>
+                <script>
+                    const sub = () => {
+                        ($('[name=search]').val().trim() == "") ? event.preventDefault() : $("#search-form").submit();
+                    }
+                </script>
+            </div>
+            <div class="category-div">
+                <p class="display-4 text-center">Category</p>
+            </div>
+            <div class="row">
+                <a href="/category/products/men-clothes" class="col-xl-3 col-lg-4 col-md-6 col-10 my-3 mx-auto" style="text-decoration: none;">
+                    <div class="card w-100">
+                        <img src="https://cf.shopee.co.th/file/f06f0abdf6bb5a65fdc6edf73101b820_tn" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text fs-4">Men Clothes</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="/category/products/women-clothes" class="col-xl-3 col-lg-4 col-md-6 col-10 my-3 mx-auto" style="text-decoration: none;">
+                    <div class="card w-100">
+                        <img src="https://cf.shopee.co.th/file/14eb48c96d2af38b43e73bd438cb4418_tn" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text fs-4">Women Clothes</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="/category/products/mobile-and-others" class="col-xl-3 col-lg-4 col-md-6 col-10 my-3 mx-auto" style="text-decoration: none;">
+                    <div class="card w-100">
+                        <img src="https://cf.shopee.co.th/file/398408c2f8ab9de41f1e06e75edb38bc_tn" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text fs-4">Mobile And Others</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="/category/products/computer-and-laptop" class="col-xl-3 col-lg-4 col-md-6 col-10 my-3 mx-auto"style="text-decoration: none;">
+                    <div class="card w-100">
+                        <img src="https://cf.shopee.co.th/file/c1c3ef22b08e9e92a820238900edc982_tn" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text fs-4">Computer And Laptop</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="/category/products/sport" class="col-xl-3 col-lg-4 col-md-6 col-10 my-3 mx-auto" style="text-decoration: none;">
+                    <div class="card w-100">
+                        <img src="https://cf.shopee.co.th/file/d798b34734fdbd0c5b186563453fd9db_tn" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text fs-4">Sport</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="/category/products/entertainment" class="col-xl-3 col-lg-4 col-md-6 col-10 my-3 mx-auto" style="text-decoration: none;">
+                    <div class="card w-100">
+                        <img src="https://cf.shopee.co.th/file/4b8edfd0d3711df614cee49ce9575384_tn" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text fs-4">Entertainment</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="/category/products/game" class="col-xl-3 col-lg-4 col-md-6 col-10 my-3 mx-auto" style="text-decoration: none;">
+                    <div class="card w-100">
+                        <img src="https://cf.shopee.co.th/file/a1e2db8724dcd09ace3371b5d0785140_tn" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text fs-4">Game</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="/category/products/cosmetics" class="col-xl-3 col-lg-4 col-md-6 col-10 my-3 mx-auto" style="text-decoration: none;">
+                    <div class="card w-100">
+                        <img src="https://cf.shopee.co.th/file/dad0e4f4f94ab4a75392ebf587af5bf0_tn" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text fs-4">Cosmetics</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="/category/products/baby" class="col-xl-3 col-lg-4 col-md-6 col-10 my-3 mx-auto" style="text-decoration: none;">
+                    <div class="card w-100">
+                        <img src="https://cf.shopee.co.th/file/82c330eb4a6202dd2e359cad3a2bc289_tn" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text fs-4">Baby</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="/category/products/furniture" class="col-xl-3 col-lg-4 col-md-6 col-10 my-3 mx-auto" style="text-decoration: none;">
+                    <div class="card w-100">
+                        <img src="https://cf.shopee.co.th/file/b680b0e115248f8b7cf4c1dab5240563_tn" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text fs-4">Furniture</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="/category/products/accessories" class="col-xl-3 col-lg-4 col-md-6 col-10 my-3 mx-auto" style="text-decoration: none;">
+                    <div class="card w-100">
+                        <img src="https://cf.shopee.co.th/file/68b87384345976cb3735b129ecec92d7_tn" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text fs-4">Accessories</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="/category/products/bag" class="col-xl-3 col-lg-4 col-md-6 col-10 my-3 mx-auto" style="text-decoration: none;">
+                    <div class="card w-100">
+                        <img src="https://cf.shopee.co.th/file/a879f390f7cfe48a7e9816a3fb489e98_tn" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text fs-4">Bag</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="/category/products/electrical-appliance" class="col-xl-3 col-lg-4 col-md-6 col-10 my-3 mx-auto" style="text-decoration: none;">
+                    <div class="card w-100">
+                        <img src="https://cf.shopee.co.th/file/2b35d04b65cfd4bac5264133f830c3ae_tn" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text fs-4">Electrical appliance</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="/category/products/food-and-beverage" class="col-xl-3 col-lg-4 col-md-6 col-10 my-3 mx-auto" style="text-decoration: none;">
+                    <div class="card w-100">
+                        <img src="https://cf.shopee.co.th/file/ef3225f54d2d375247837391cf743e93_tn" alt="...">
+                        <div class="card-body">
+                            <p class="card-text fs-4">Food And Beverage</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="/category/products/pet" class="col-xl-3 col-lg-4 col-md-6 col-10 my-3 mx-auto" style="text-decoration: none;">
+                    <div class="card w-100">
+                        <img src="https://cf.shopee.co.th/file/6ab5237b2f3716e46ee71d0cea1a23e8_tn" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text fs-4">Pet</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="/category/products/stationery" class="col-xl-3 col-lg-4 col-md-6 col-10 my-3 mx-auto" style="text-decoration: none;">
+                    <div class="card w-100">
+                        <img src="https://cf.shopee.co.th/file/d7a1d0618cab954e7359e0681d7d7b4c_tn" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <p class="card-text fs-4">Stationery</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <%- include('footer') %>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category</title>
+    <link rel="icon" href="/another-images/shortcut-icon.svg">
+    <style>
+        .nav-item > img {
+            width: 50px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-warning fixed-top">
+        <div class="container-fluid">
+            <div class="logo">
+                <a class="navbar-brand ms-3 d-flex align-items-center" href="/category">
+                    <img style="width: 40px;" src="/another-images/koala.png" alt=""><b class="fs-3"><i>Koala</i></b>
+                </a>
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <% if(locals.guest) { %>
+                        <li class="nav-item mx-auto">
+                            <a class="nav-link" href="/">Login</a>
+                        </li>
+                    <% }else { %>
+                        <% if(locals.admin) { %>
+                            <li class="nav-item mx-auto">
+                                <a class="nav-link me-2" href="/admin-manage-products">Manage Products</a>
+                            </li>
+                            <li class="nav-item mx-auto">
+                                <a class="nav-link me-2" href="/admin-orders">Manage order<span class="badge bg-danger ms-2">!</span></a>
+                            </li>
+                            <li class="nav-item mx-auto">
+                                <a class="nav-link" href="/logout">Logout</a>
+                            </li>
+                        <% }else { %>
+                            <% let firstLetter = username.charAt(0) %>
+                            <li class="nav-item dropdown mx-auto">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Customer menu
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li>
+                                        <a class="dropdown-item" href="/cart/<%= user_id %>">
+                                            Cart
+                                            <% if(locals.number) { %>
+                                                <span class="badge bg-danger ms-2">
+                                                    <%= number %>
+                                                </span>
+                                            <% } %>
+                                        </a>
+                                    </li>
+                                    <li><a class="dropdown-item" href="/payment-list/<%= user_id %>">Payment</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown mx-auto">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Shopkeeper menu
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li>
+                                        <a class="dropdown-item" href="/manage-product/<%= user_id %>">Manage products</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="/add-product/<%= user_id %>">Add product</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="/order/<%= user_id %>">
+                                            Order<span class="badge bg-danger ms-2">!</span>
+                                        </a>
+                                    </li>
+                                    <li><a class="dropdown-item" href="/sale-history?p=1week">Sales history</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item d-flex align-items-center mx-auto">
+                                <div>
+                                    <a class="d-flex align-items-center mx-4" href="/user-information/<%= user_id %>" style="text-decoration: none;">
+                                        <img style="width: 40px;" src="/user-icon/<%= firstLetter %>.png" alt="user-image">
+                                        <b class="fs-5 ms-1">
+                                            <%= username %>
+                                        </b>
+                                    </a>
+                                </div>
+                            </li>
+                            <li class="nav-item mx-auto">
+                                <a class="nav-link" href="/logout">Logout</a>
+                            </li>
+                        <% } %>
+                    <% } %>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</body>
+</html>

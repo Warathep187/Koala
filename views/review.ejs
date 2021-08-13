@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <%- include('link') %>
+    <script src="/js/review-script.js">
+    </script>
+</head>
+<body>
+    <%- include('nav-for-pages') %>
+    <div class="separate">
+
+    </div>
+    <div class="container-fluid">
+        <div class="container p-3">
+            <div class="my-4 text-center">
+                <img src="/product-images-uploaded/<%= data.product_image[0] %>" style="border-radius: 5px;width: 210px; height: 150px; object-fit: cover;"><br>
+                <a href="/view-product/<%= product_id %>" class="fs-4 text-danger"><%= data.product_name %></a>
+            </div>
+            <div class="text-center mb-2">
+                <img style="width: 30px; cursor: pointer;" src="/another-images/star.png" id="star-1">
+                <img style="width: 30px; cursor: pointer;" src="/another-images/star-space.png" id="star-2">
+                <img style="width: 30px; cursor: pointer;" src="/another-images/star-space.png" id="star-3">
+                <img style="width: 30px; cursor: pointer;" src="/another-images/star-space.png" id="star-4">
+                <img style="width: 30px; cursor: pointer;" src="/another-images/star-space.png" id="star-5">
+            </div>
+            <form action="/reviewed" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="product_id" value="<%= product_id %>">
+                <input type="hidden" name="transfer" value="<%= transfer %>">
+                <input type="hidden" name="cart_id" value="<%= cart_id %>">
+                <input type="hidden" name="points" value="1">
+                <div class="form-floating col-lg-6 col-md-8 col-12 p-2 mx-auto">
+                    <textarea name="review" maxlength="250" class="form-control" placeholder="Comment here" id="floatingTextarea" style="height: 100px" required></textarea>
+                    <label for="floatingTextarea">Comments</label>
+                    <div>
+                        <div class="my-3">
+                            <label for="formFile" class="form-label">Image for reviews</label>
+                            <input class="form-control" type="file" name="image" accept="image/*" id="formFile">
+                        </div>
+                    </div>
+                    <div class="my-2">
+                        <img class="w-50" style="display: none;" id="review-image">
+                    </div>
+                    <div class="my-2">
+                        <button class="btn btn-outline-success">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

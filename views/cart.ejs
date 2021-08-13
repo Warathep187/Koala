@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your cart</title>
+    <%- include('link') %>
+    <script src="/js/cart-script.js">
+    </script>
+</head>
+<body>
+    <div class="separate">
+        <input type="hidden" value="<%= user_id %>">
+    </div>
+    <%- include('nav-for-pages') %>
+    <div class="container-fluid">
+        <div class="container p-4">
+            <p class="display-2 text-center py-3">
+                Your cart
+            </p>
+            <div class="text-center">
+                <p class="fs-4 text-success">
+                    <%= dataFromCart.length %> items in cart.
+                </p>
+            </div>
+            <div>
+                <% if(dataFromCart.length === 0) { %>
+                    <button type="button" class="btn btn-outline-warning" id="select-all" disabled>Select all</button>
+                <% }else { %>
+                    <button type="button" class="btn btn-outline-warning" id="select-all">Select all</button>
+                <% } %>
+                <button type="button" class="btn btn-outline-danger ms-1" id="delete" disabled>Delete selected item</button>
+            </div>
+            <div class="information">
+                <form action="/cart/payment" method="post">
+                <% for(let d of dataFromCart) { %>
+                    <div class="d-flex align-items-center border justify-content-start my-2">
+                        <div class="check-div mx-4">
+                            <input class="form-check-input" type="checkbox" name="check" value="<%= d._id %>">
+                        </div>
+                        <div class="img-div me-4">
+                            <img style="width: 160px; object-fit: cover; height: 100px;" src="/product-images-uploaded/<%= d.product_image %>">
+                        </div>
+                        <div class="info">
+                            <div class="top-info text-wrap">
+                                <a href="/view-product/<%= d.product_id %>">
+                                    <p class="fs-4"><%= d.product_name %></p>
+                                </a>
+                            </div>
+                            <div class="middle-info d-flex">
+                                <% if(d.product_type.length == 3) { %>
+                                    <h3><span class="badge bg-secondary me-2"><%= d.product_type[0] %></span></h3>
+                                <% }else { %>
+                                    <h3><span class="badge bg-secondary me-2">-</span></h3>
+                                <% } %>
+                                <% if(d.product_type.length == 3) { %>
+                                    <h3><span class="badge bg-secondary"><%= d.product_type[2] %> pcs.</span></h3>
+                                <% }else { %>
+                                    <h3><span class="badge bg-secondary"><%= d.product_type[1] %> pcs.</span></h3>
+                                <% } %>
+                            </div>
+                            <div class="bottom-info">
+                                <% if(d.product_type.length == 3) { %>
+                                    <% let num = parseInt(d.product_type[1]).toLocaleString("en-US");
+                                    %>
+                                    <p class="fs-4 text-danger"><%= num %> THB</p>
+                                <% }else { %>
+                                    <% let num = parseInt(d.product_type[0]).toLocaleString("en-US");
+                                    %>
+                                    <p class="fs-4 text-danger"><%= num %> THB</p>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+                <input type="hidden" name="checked" value="">
+                </form>
+            </div>
+            <div>
+                <p class="fs-3">Result <b class="fs-2 text-danger" id="result">0</b> Baht</p>
+            </div>
+            <div class="text-end">
+                <button class="btn btn-outline-primary px-5 py-2" id="buy">Buy</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

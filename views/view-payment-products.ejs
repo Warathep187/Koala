@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products in payment</title>
+    <%- include('link') %>
+    <script>
+        $(function() {
+            $('.text-break').html($('.text-break').text());
+        })
+    </script>
+</head>
+<body>
+    <%- include('nav-for-pages') %>
+    <div class="separate">
+
+    </div>
+    <div class="container-fluid">
+        <div class="container p-3">
+            <% if(data.length === 0) { %>
+                <div class="row">
+                    <div class="col-lg-4 col-md-6 col-6 mx-auto text-center">
+                        <img class="w-75" src="/another-images/box.png">
+                    </div>
+                    <div class="text-center">
+                        <p class="fs-4 text-danger">All product in your payment has deleted.</p>
+                        <p class="fs-4 text-warning">We will transfer money to you soon.</p>
+                    </div>
+                </div>
+            <% }else { %>
+                <div>
+                    <div class="p-2 text-center">
+                        <b class="fs-2 text-danger">Address</b>
+                        <p class="text-break fs-5">
+                            <%= data[0].address %>
+                        </p>
+                    </div>
+                </div>
+                <% for(let d of data) { %>
+                    <div class="border my-3">
+                        <div class="d-flex align-items-center">
+                            <div class='m-2'>
+                                <img src="/product-images-uploaded/<%= d.product_image %>" style="width: 180px; height: 138px; object-fit: cover;">
+                                <p>
+                                    <% if(d.status == "cancel") { %>
+                                        Status :<b class="text-danger"><%= d.status %></b>
+                                    <% }else if(d.status == "preparing") { %>
+                                        Status :<b class="text-warning"><%= d.status %></b>
+                                    <% }else if(d.status == "shipped")  { %>
+                                        Status :<b class="text-primary"><%= d.status %></b>
+                                    <% } %>
+                                </p>
+                            </div>
+                            <div>
+                                <a href="/view-product/<%= d.product_id %>" class="fs-4"><%= d.product_name; %></a>
+                                <div class="d-flex">
+                                    <% let num = (d.product_type.length == 3) ? parseInt(d.product_type[1]).toLocaleString("en-US") : parseInt(d.product_type[0]).toLocaleString("en-US") %>
+                                    <% if(d.product_type.length == 3) { %>
+                                        <h3><span class="badge bg-secondary me-2"><%= d.product_type[0] %></span></h3>
+                                        <h3><span class="badge bg-secondary"><%= d.product_type[2] %> pcs.</span></h3>
+                                    <% }else { %>
+                                        <h3><span class="badge bg-secondary me-2">-</span></h3>
+                                        <h3><span class="badge bg-secondary"><%= d.product_type[1] %> pcs.</span></h3>
+                                    <% } %>
+                                </div>
+                                <div>
+                                    <p class="fs-3 text-success"><%= num %> Bath</p>
+                                </div>
+                            </div>
+                        </div>
+                        <% if(d.shipped_time != undefined) { %>
+                            <% if(d.status == 'shipped') { %>
+                                <div class="m-2">
+                                    <a href="/review?p=<%= d.product_id %>&t=<%= transfer %>&c=<%= d._id %>">
+                                        <button class="btn btn-outline-success px-3" type="button">
+                                            review
+                                        </button>
+                                    </a>
+                                </div>
+                            <% }else if(d.status == 'received') { %>
+                                <div class="m-2 text-center">
+                                    <b class="fs-4 text-success text">Received & Reviewed</b>
+                                </div>
+                            <% } %>
+                        <% } %>
+                    </div>
+                <% } %>
+            <% } %>
+        </div>
+    </div>
+</body>
+</html>

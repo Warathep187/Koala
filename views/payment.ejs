@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your payments</title>
+    <%- include('link') %>
+    <style>
+        body {
+            background-color: #ffecb4;
+        }
+        .container {
+            background-color: white;
+        }
+        .separate {
+            height: 67px;
+        }
+    </style>
+    <script src="/js/payment-script.js">
+    </script>
+</head>
+<body>
+    <div class="separate">
+
+    </div>
+    <%- include('nav-for-pages') %>
+    <div class="container-fluid">
+        <div class="container py-5 px-2">
+        <form id="form" action="/cart/payment/transfer" method="post" enctype="multipart/form-data">
+            <div class="title my-3">
+                <p class="display-3 text-center">Payment</p>
+            </div>
+            <div class="information">
+                <% let ids = "" %>
+                <% for(let d of data) { %>
+                    <% ids += " " + d._id %>
+                    <div class="d-flex align-items-center border justify-content-start my-2">
+                        <div class="img-div mx-3">
+                            <img style="width: 170px; object-fit: cover; height: 120px;" src="/product-images-uploaded/<%= d.product_image %>">
+                        </div>
+                        <div class="info">
+                            <div class="top-info text-wrap">
+                                <a href="/view-product/<%= d.product_id %>">
+                                    <p class="fs-4"><%= d.product_name %></p>
+                                </a>
+                            </div>
+                            <div class="middle-info d-flex">
+                                <% if(d.product_type.length == 3) { %>
+                                    <h3><span class="badge bg-secondary me-2"><%= d.product_type[0] %></span></h3>
+                                <% }else { %>
+                                    <h3><span class="badge bg-secondary me-2">-</span></h3>
+                                <% } %>
+                                <% if(d.product_type.length == 3) { %>
+                                    <h3><span class="badge bg-secondary"><%= d.product_type[2] %> pcs.</span></h3>
+                                <% }else { %>
+                                    <h3><span class="badge bg-secondary"><%= d.product_type[1] %> pcs.</span></h3>
+                                <% } %>
+                            </div>
+                            <div class="bottom-info">
+                                <% if(d.product_type.length == 3) { %>
+                                    <% let num = parseInt(d.product_type[1]).toLocaleString("en-US");
+                                    %>
+                                    <p class="fs-4 text-danger"><%= num %> THB</p>
+                                <% }else { %>
+                                    <% let num = parseInt(d.product_type[0]).toLocaleString("en-US");
+                                    %>
+                                    <p class="fs-4 text-danger"><%= num %> THB</p>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+            <div>
+                <input type="hidden" name="cartId" value="<%= ids %>">
+            </div>
+            <div class="my-5">
+                <% let result = parseInt(sum).toLocaleString("en-US"); %>
+                <h3>Result <b class="fs-2 text-danger" id="result"><%= result %></b> THB</h3>
+                <input type="hidden" name="sum" value="<%= sum %>">
+            </div>
+            <div class="mb-4">
+                <input type="text" name="name" class="form-control w-50" placeholder="Your name" required value="<%= fullName %>">
+            </div>
+            <div class="mb-4">
+                <select name="address" class="form-control w-50">
+                    <% for(let a of address) { %>
+                        <option value="<%= a %>"><%= a %></option>
+                    <% } %>
+                </select>
+            </div>
+            <div>
+                <div>
+                    <p>Bank : <b class="fs-5 text-danger">KrungThai</b></p>
+                    <p>Number : <b class="fs-5 text-danger">0-123-4567-891</b></p>
+                    <p>Name : <b class="fs-5 text-danger">Mr. Warathep Komwongsa</b></p>
+                </div>
+                <input class="form-control w-50" type="file" name="slip" accept="image/*" required>
+                <div class="py-1">
+                    <img class="w-50" style="display: none;" id="slip-image">
+                </div>
+                <button class="btn btn-success px-4" id="submit">Submit</button>
+            </div>
+        </div>
+    </form>
+    </div>
+</body>
+</html>

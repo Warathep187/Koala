@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage your products</title>
+    <%- include('link') %>
+    <style>
+        #product-image {
+            object-fit: cover;
+            width: 75px;
+        }
+    </style>
+</head>
+<body>
+    <div class="separate">
+
+    </div>
+    <%- include('nav-for-pages') %>
+    <div class="container-fluid">
+        <div class="container">
+            <div class="title text-center p-4">
+                <% let sum = data.length %>
+                <p class="display-3">Your products</p>
+                <p class="fs-5 text-success">Find <%= sum %> products</p>
+            </div>
+            <div class="product p-3">
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Name</th>
+                            <th class="text-center">Sold</th>
+                            <th class="text-center">Category</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(let d of data) { %>
+                            <tr>
+                                <td class="text-center"><a href="/view-product/<%= d._id %>"><%= d.product_name %></a></td>
+                                <td class="text-center"><%= d.product_sold %></td>
+                                <td class="text-center">#<%= d.product_category %></td>
+                                <td class="text-center">
+                                    <a href="/edit-product/<%= d._id %>" title="Edit">
+                                        <img src="/bootstrap-icons/pencil-square.svg">
+                                    </a>
+                                    <a id="delete" href="/delete-product/<%= d._id %>">
+                                        <img src="/bootstrap-icons/trash.svg">
+                                    </a>
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

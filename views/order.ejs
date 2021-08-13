@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your orders</title>
+    <%- include('link') %>
+    <script src="/js/order-script.js">
+    </script>
+</head>
+<body>
+    <%- include('nav-for-pages')%>
+    <div class="separate">
+
+    </div>
+    <div class="container-fluid">
+        <div class="container p-2">
+            <% if(data.length == 0) { %>
+                <div class="text-center p-3">
+                    <p class="text-danger fs-4">No orders yet.</p>
+                    <div class="row mx-auto">
+                        <div class="col-lg-4 col-md-6 col-6 mx-auto">
+                            <img class="w-75" src="/another-images/box.png">
+                        </div>
+                    </div>
+                </div>
+            <% }else { %>
+                <% for(let d of data) { %>
+                    <div class="border">
+                        <div class="d-flex align-items-center">
+                            <div class="mx-3">
+                                <img style="width: 180px; height: 140px; object-fit: cover;" src="/product-images-uploaded/<%=  d.product_image %>">
+                            </div>
+                            <div>
+                                <div>
+                                    <a href="/view-product/<%= d.product_id %>" class="fs-2"><%=  d.product_name %></a>
+                                </div>
+                                <div class="d-flex">
+                                    <%
+                                    let dateTime = d.buy_time.getFullYear() + "/" + d.buy_time.getMonth() + "/" + d.buy_time.getDate() + " " + d.buy_time.getHours() + ":" + d.buy_time.getMinutes() + ":" + d.buy_time.getSeconds();
+                                    %>
+                                    <% let num = (d.product_type.length == 3) ? parseInt(d.product_type[1]).toLocaleString("en-US") : parseInt(d.product_type[0]).toLocaleString("en-US") %>
+                                    <% if(d.product_type.length == 3) { %>
+                                        <h3><span class="badge bg-secondary me-2"><%= d.product_type[0] %></span></h3>
+                                        <h3><span class="badge bg-secondary"><%= d.product_type[2] %> pcs.</span></h3>
+                                    <% }else { %>
+                                        <h3><span class="badge bg-secondary me-2">-</span></h3>
+                                        <h3><span class="badge bg-secondary"><%= d.product_type[1] %> pcs.</span></h3>
+                                    <% } %>
+                                </div>
+                                <div>
+                                    <p class="fs-5">Result <b class="text-danger"><%= num %></b> Bath</p>
+                                </div>
+                                <div>
+                                    <% if(d.cancel) { %>
+                                        <p><%= dateTime %></p>
+                                    <% }else { %>
+                                        <p><%= dateTime %></p>
+                                        <% if(d.status == "preparing") { %>
+                                            <span>
+                                                Status : 
+                                                <b class="text-warning">
+                                                    <%= d.status %>
+                                                </b>
+                                            </span>
+                                        <% }else if(d.status == "shipped") { %>
+                                            <span>
+                                                Status : 
+                                                <b class="text-primary" id="status">
+                                                    <%= d.status %>
+                                                </b>
+                                            </span>
+                                        <% } %>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <% if(d.status == 'cancel' || d.cancel) { %>
+                                <div class="text-center my-2">
+                                    <b class="fs-5 text-danger">Already cancel.</b>
+                                </div>
+                            <% }else { %>
+                                <% if(d.confirm) { %>
+                                    <% if(d.status == 'preparing') { %>
+                                        <form class="d-flex" action="/set-status/<%= d._id %>" method="post" id="form-<%= d._id %>">
+                                            <select class="form-control w-75" name="status-<%= d._id %>">
+                                                <option value="preparing">Preparing</option>
+                                                <option value="shipped">Shipped✔️</option>
+                                            </select>
+                                            <a class="w-25" href="#<%= d._id %>" class="set">
+                                                <button type="button" class="set btn btn-outline-success w-100">Set</button>
+                                            </a>
+                                        </form>
+                                    <% }else { %>
+                                        <b class="fs-5 ms-2">Shipped✔️</b>
+                                    <% } %>
+                                <% }else { %>
+                                    <p class="fs-5 text-danger ms-2 text-break">Koala have not confirmed this order yet.<br>Please wait.</p>
+                                <% } %>
+                            <% } %>
+                        </div>
+                        <% if(d.status != 'cancel') {%>
+                            <div>
+                                <div class="p-3 border">
+                                    <p class="fs-4">Address</p>
+                                    <p class="address"><%= d.address %></p>
+                                </div>
+                            </div>
+                        <% } %>
+                    </div>
+                <% } %>
+            <% } %>
+        </div>
+    </div>
+</body>
+</html>

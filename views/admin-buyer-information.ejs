@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <%- include('link') %>
+</head>
+<body>
+    <div class="separate">
+
+    </div>
+    <%- include('nav-for-pages') %>
+    <div class="container-fluid">
+        <div class="container p-4">
+            <div class="mb-4 text-center">
+                <p class="display-3">Buyer Information</p>
+            </div>
+            <div class="pb-5">
+                <div class="col-lg-2 col-md-3 col-4 mx-auto mb-3">
+                    <img class="w-100" src="/user-icon/<%= data.username.charAt(0) %>.png">
+                </div>
+                <div class="w-75 mx-auto">
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="floatingInput1" value="<%= data.full_name %>" readonly>
+                        <label for="floatingInput1">Name</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="floatingInput2" value="<%= data.email %>" readonly>
+                        <label for="floatingInput2">Email</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="floatingInput3" value="<%= data.bank %>" readonly>
+                        <label for="floatingInput3">Bank</label>
+                    </div>
+                    <div class="form-floating mb-2">
+                        <input type="text" class="form-control" id="floatingInput4" value="<%= data.bank_number %>" readonly>
+                        <label for="floatingInput4">Bank number</label>
+                    </div>
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="floatingInput5" value="<%= data.tel %>" readonly>
+                        <label for="floatingInput5">Telephone number</label>
+                    </div>
+                    <div class="mt-3">
+                        <p class="fs-5">Address</p>
+                    </div>
+                    <div class="mb-2">
+                        <% for(let a of addresses) { %>
+                            <textarea class="form-control my-2" style="height: 100px" readonly><%= a.address %></textarea>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

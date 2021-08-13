@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>(Admin) Products in payment</title>
+    <%- include('link') %>
+    <script src="/js/admin-view-payment-products-script.js">
+    </script>
+</head>
+<body>
+    <div class="separate">
+
+    </div>
+    <%- include('nav-for-pages') %>
+    <div class="container-fluid">
+        <div class="container p-3">
+            <% if(dataFromTransfer.cancel) { %>
+                <div class="text-center">
+                    <p class="display-3 text-danger fw-bold">Canceled</p>
+                </div>
+            <% }else if(dataFromTransfer.confirm) { %>
+                <div class="text-center">
+                    <p class="display-3 text-success fw-bold">Confirmed</p>
+                </div>
+            <% } %>
+            <div class="text-center my-3 p-2 border rounded">
+                <p class="fs-4 text-break">Buyer id : <a class="text-danger" href="/admin-buyer-information?b=<%= dataFromTransfer.buyer_id %>"><%= dataFromTransfer.buyer_id %></a></p>
+            </div>
+            <% if(data.length === 0) { %>
+                <div class='my-3 text-center'>
+                    <p class="fs-4 text-break text-danger">All product in your payment has deleted.</p>
+                </div>
+            <% }else { %>
+                <% for(let d of data) { %>
+                    <div class="border my-3 d-flex align-items-center rounded">
+                        <div class='m-2'>
+                            <img src="/product-images-uploaded/<%= d.product_image %>" style="width: 185px; height: 140px; object-fit: cover;">
+                            <p class="fs-5">
+                                Status :
+                                <% if(d.status == "cancel") { %>
+                                    <b class="text-danger"><%= d.status %></b>
+                                <% }else if(d.status == "preparing") { %>
+                                    <b class="text-warning"><%= d.status %></b>
+                                <% }else if(d.status == "shipped")  { %>
+                                    <b class="text-primary"><%= d.status %></b>
+                                <% }else if(d.status == "received") { %>
+                                    <b class="text-success"><%= d.status %></b>
+                                <% } %>
+                            </p>
+                        </div>
+                        <div>
+                            <a href="/view-product/<%= d.product_id %>" class="fs-4"><%= d.product_name; %></a>
+                            <div class="d-flex">
+                                <% let num = (d.product_type.length == 3) ? parseInt(d.product_type[1]).toLocaleString("en-US") : parseInt(d.product_type[0]).toLocaleString("en-US") %>
+                                <% if(d.product_type.length == 3) { %>
+                                    <h3><span class="badge bg-secondary me-2"><%= d.product_type[0] %></span></h3>
+                                    <h3><span class="badge bg-secondary"><%= d.product_type[2] %> pcs.</span></h3>
+                                <% }else { %>
+                                    <h3><span class="badge bg-secondary me-2">-</span></h3>
+                                    <h3><span class="badge bg-secondary"><%= d.product_type[1] %> pcs.</span></h3>
+                                <% } %>
+                            </div>
+                            <div>
+                                <p class="fs-5 text-break">Shop id : <a class="text-danger" href="/admin-shop-information?s=<%= d.shop_id %>"><%= d.shop_id %></a></p>
+                            </div>
+                            <div>
+                                <p class="fs-5"><b class="text-secondary"><%= num %></b> BTH</p>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+            <% } %>
+            <div>
+                <p class="fs-3">Result : <b class="text-success"><%= dataFromTransfer.result.toLocaleString("en-US") %></b> THB</p>
+            </div>
+        </div>
+            <div>
+                <input type="hidden" name="paymentID" value="<%= dataFromTransfer._id %>">
+            </div>
+            <div class="container p-3 rounded my-4">
+                <% if(dataFromTransfer.cancel) { %>
+                    <div class="text-center">
+                        <span class="badge bg-danger fs-5 p-2 my-2">Canceled</span>
+                    </div>
+                <% }else if(dataFromTransfer.confirm) { %>
+                    <div class="text-center">
+                        <span class="badge bg-success fs-5 p-2 my-2">Confirmed</span>
+                    </div>
+                <% } %>
+                <div class="col-xl-5 col-lg-6 col-md-6 col-12 mx-auto">
+                    <img class="w-100" src="/slip-images/<%= dataFromTransfer.slip_image %>">
+                </div>
+                <% if(!dataFromTransfer.cancel && !dataFromTransfer.confirm) { %>
+                <div class="mt-3 text-center">
+                    <button type="button" class="btn btn-outline-success me-2" id="confirm">confirm</button>
+                    <button type="button" class="btn btn-outline-danger" id="cancel">cancel</button>
+                </div>
+                <% } %>
+            </div>
+    </div>
+</body>
+</html>

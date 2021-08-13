@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <%- include('link') %>
+    <script src="/js/edit-product-script.js">
+    </script>
+</head>
+<body>
+    <div class="separate">
+
+    </div>
+    <% if(locals.user_id) { %>
+        <input type="hidden" name="userId" value="<%= user_id %>">
+    <% } %>
+    <%- include('nav-for-pages') %>
+    <div class="container-fluid">
+        <div class="container p-3">
+            <div class="text-center my-4">
+                <p class="display-3">Edit</p>
+            </div>
+            <div class="w-75 mx-auto">
+                <form>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="floatingInput1" value="<%= data.product_name %>" name="name">
+                        <label for="floatingInput1">Product name</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <select name="cate" class="form-select" id="floatingSelect2" aria-label="Floating label select example">
+                            <% let cates = ['#Men clothes', '#Women clothes', '#Mobile and others', '#Computer and laptop', '#Sport', '#Entertainment', '#Game', '#Cosmetics', '#Baby', '#Furniture', '#Accessories', '#Bag', '#Electrical appliance', '#Pet', '#Stationery'] %>
+                            <% for(let c of cates) { %>
+                                <% if(c.slice(1) === data.product_category) { %>
+                                    <option value="<%= c %>" selected><%= c %></option>
+                                <% }else {%>
+                                    <option value="<%= c %>"><%= c %></option>
+                                <% } %>
+                            <% } %>
+                        </select>
+                        <label for="floatingSelect2">Category</label>
+                      </div>
+                    <div class="form-floating mb-3">
+                        <textarea name="information" maxlength="1000" style="height: 100px" class="form-control" placeholder="Leave a comment here" id="floatingTextarea3"><%= data.product_information %></textarea>
+                        <label for="floatingTextarea3">Information</label>
+                    </div>
+                    <% if(data.product_type[0].length === 3) { %>
+                        <input type="hidden" name="check-type" value="type">
+                        <input type="hidden" name="hiddenType">
+                        <input type="hidden" name="hiddenPrice">
+                        <input type="hidden" name="hiddenNumber">
+                    <% }else { %>
+                        <input type="hidden" name="check-type" value="no-type">
+                    <% } %>
+                    <div>
+                    <% for(let a of data.product_type) { %>
+                        <% if(a.length === 2) { %>
+                            <div class="d-flex mb-4">
+                                <input class="form-control me-2" style="width: 60%" type="text" name="price" maxlength="8" value="<%= a[0] %>" placeholder="price">
+                                <input class="form-control" style="width: 40%;" type="number" name="number" min="0" maxlength="7" value="<%= a[1] %>" placeholder="number of product">
+                            </div>
+                        <% } else { %>
+                            <div class="d-flex mb-2">
+                                <input class="form-control" type="text" name="type" maxlength="16" value="<%= a[0] %>" placeholder="type">
+                                <input class="form-control mx-2" type="text" name="type-price" maxlength="7" value="<%= a[1] %>" placeholder="price">
+                                <input class="form-control" type="number" name="type-number" maxlength="6" value="<%= a[2] %>" placeholder="number of product">
+                            </div>
+                        <% } %>
+                    <% } %>
+                    </div>
+                    <div>
+                        <span id="status"></span>
+                    </div>
+                    <div>
+                        <button id="save" class="btn btn-success me-1" type="button">Save</button>
+                        <button onclick="back()" class="btn btn-danger" type="button">Cancel</button>
+                        <script>
+                            function back() {
+                                window.history.back();
+                            }
+                        </script>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
