@@ -13,9 +13,6 @@
     <div class="separate">
 
     </div>
-    <% if(locals.user_id) { %>
-        <input type="hidden" name="userId" value="<%= user_id %>">
-    <% } %>
     <%- include('nav-for-pages') %>
     <div class="container-fluid">
         <div class="container p-3">
@@ -25,6 +22,7 @@
             <div class="w-75 mx-auto">
                 <form>
                     <div class="form-floating mb-3">
+                        <input type="hidden" name="product_id" value="<%= data._id %>">
                         <input type="text" class="form-control" id="floatingInput1" value="<%= data.product_name %>" name="name">
                         <label for="floatingInput1">Product name</label>
                     </div>

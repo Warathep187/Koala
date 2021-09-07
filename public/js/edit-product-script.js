@@ -23,22 +23,19 @@ $(function() {
         }
         if($('[name=check-type').val() === 'type') {
             $('[name=type]').each((idx, value) => {
-                if(value.value == '') {
-                    return;
+                if(value.value !== '') {
+                    typeArray.push(value.value.replace(/ /g, '-'));
                 }
-                typeArray.push(value.value.replace(/ /g, '-'));
             })
             $('[name=type-price]').each((idx, value) => {
-                if(!$.isNumeric(value.value) || (value.value == '')) {
-                    return;
+                if($.isNumeric(value.value) && (value.value !== '')) {
+                    priceArray.push(value.value);
                 }
-                priceArray.push(value.value);
             })
             $('[name=type-number]').each((idx, value) => {
-                if(!$.isNumeric(value.value) || (value.value == '')) {
-                    return;
+                if($.isNumeric(value.value) && (value.value !== '')) {
+                    numberArray.push(value.value);
                 }
-                numberArray.push(value.value);
             })
             if(typeArray.length === priceArray.length && priceArray.length === numberArray.length) {
                 t = true;
@@ -73,7 +70,7 @@ $(function() {
         if(n && i && t) {
             if($('[name=check-type]').val() == 'type') {
                 $.ajax({
-                    url: '/update-product-info/'+"<%= data._id %>",
+                    url: '/update-product-info/' + $("[name=product_id]").val(),
                     type: 'POST',
                     data: {
                         name: $('[name=name]').val(),
@@ -93,14 +90,14 @@ $(function() {
                             "<% if(locals.admin) { %>"
                                 location.href = '/admin-manage-products'
                             "<% }else { %>"
-                                location.href = '/manage-product/'+$('[name=userId]').val();
+                                location.href = '/manage-product';
                             "<% } %>"
                         })
                     }
                 })
             }else if($('[name=check-type]').val() == 'no-type') {
                 $.ajax({
-                    url: '/update-product-info/'+"<%= data._id %>",
+                    url: '/update-product-info/' + $("[name=product_id]").val(),
                     type: 'POST',
                     data: {
                         name: $('[name=name]').val(),
@@ -119,7 +116,7 @@ $(function() {
                             "<% if(locals.admin) { %>"
                                 location.href = '/admin-manage-products'
                             "<% }else { %>"
-                                location.href = '/manage-product/'+$('[name=userId]').val();
+                                location.href = '/manage-product';
                             "<% } %>"
                         })
                     }

@@ -48,7 +48,7 @@
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li>
-                                        <a class="dropdown-item" href="/cart/<%= user_id %>">
+                                        <a class="dropdown-item" href="/cart">
                                             Cart
                                             <% if(locals.number) { %>
                                                 <span class="badge bg-danger ms-2">
@@ -57,7 +57,7 @@
                                             <% } %>
                                         </a>
                                     </li>
-                                    <li><a class="dropdown-item" href="/payment-list/<%= user_id %>">Payment</a></li>
+                                    <li><a class="dropdown-item" href="/payment-list">Payment</a></li>
                                 </ul>
                             </li>
                             <li class="nav-item dropdown mx-auto">
@@ -66,13 +66,13 @@
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li>
-                                        <a class="dropdown-item" href="/manage-product/<%= user_id %>">Manage products</a>
+                                        <a class="dropdown-item" href="/manage-product">Manage products</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="/add-product/<%= user_id %>">Add product</a>
+                                        <a class="dropdown-item" href="/add-product">Add product</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="/order/<%= user_id %>">
+                                        <a class="dropdown-item" href="/order">
                                             Order<span class="badge bg-danger ms-2">!</span>
                                         </a>
                                     </li>
@@ -81,7 +81,7 @@
                             </li>
                             <li class="nav-item d-flex align-items-center mx-auto">
                                 <div>
-                                    <a class="d-flex align-items-center mx-4" href="/user-information/<%= user_id %>" style="text-decoration: none;">
+                                    <a class="d-flex align-items-center mx-4" href="/user-information" style="text-decoration: none;">
                                         <img style="width: 40px;" src="/user-icon/<%= firstLetter %>.png" alt="user-image">
                                         <b class="fs-5 ms-1">
                                             <%= username %>

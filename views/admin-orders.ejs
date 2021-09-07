@@ -18,7 +18,7 @@
                 <div class="border my-3 p-2 rounded">
                     <p class="fs-4 text-break">Order id : <a class="text-danger" href="/admin-view-payment-products/<%= d._id %>"><%= d._id %></a></p>
                     <p class="fs-5 text-break"><%= d.buy_time %></p>
-                    <p class="fs-5">Result : <b class="text-danger"><%= d.result.toLocaleString("en-US") %></b> BTH</p>
+                    <p class="fs-5">Result : <b class="text-danger"><%= d.result.toLocaleString("en-US") %></b> THB</p>
                     <% if(d.confirm) { %>
                         <span class="badge bg-success fs-5">Confirmed</span>
                     <% }else if(d.cancel) { %>

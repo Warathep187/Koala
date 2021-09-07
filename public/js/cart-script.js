@@ -66,7 +66,7 @@ $(function() {
                     arrForDelete: arrForCheck
                 },
                 success(result) {
-                    location.href = "/cart/" + $('[type=hidden]').val()
+                    location.href = "/cart"
                 }
             })
         }

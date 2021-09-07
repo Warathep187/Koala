@@ -400,7 +400,6 @@ app.post('/confirm-or-cancel/:id', (req, res) => {
                                 return start(++i);
                             })
                         }
-                        res.send({})
                     }
                 })
             }
@@ -611,7 +610,6 @@ app.get('/category/products/:cate', (req, res) => {
                         res.render('products', {
                             product_category: req.params.cate,
                             username: req.session.username,
-                            user_id: req.session.user_id,
                             data: data,
                             number: result.length
                         });
@@ -643,6 +641,7 @@ app.get('/view-product/:id', (req, res) => {
                                     avg = "no reviews";
                                 }
                                 res.render('view-product', {
+                                    user_id: req.session.user_id,
                                     product_id: req.params.id,
                                     admin: 1,
                                     data: data,
@@ -707,21 +706,21 @@ app.get('/view-product/:id', (req, res) => {
 })
 
 //User information route.
-app.get('/user-information/:user_id', (req, res) => {
+app.get('/user-information', (req, res) => {
     if(!req.session.username) {
         res.redirect('/');
     }else {
-        usersinformation.findOne({user_id: req.params.user_id})
+        usersinformation.findOne({user_id: req.session.user_id})
         .exec((err, dataFromInfo) => {
             if(!err) {
-                usersaddress.find({user_id: req.params.user_id})
+                usersaddress.find({user_id: req.session.user_id})
                 .select('address')
                 .exec((err, dataFromAddress) => {
                     if(!err) {
-                        cart.find({buyer_id: req.params.user_id, in_payment: false})
+                        cart.find({buyer_id: req.session.user_id, in_payment: false})
                         .exec((err, result) => {
                             res.render('user-information', {
-                                user_id: req.params.user_id,
+                                user_id: req.session.user_id,
                                 username: dataFromInfo.username,
                                 email: dataFromInfo.email,
                                 address: dataFromAddress,
@@ -744,7 +743,7 @@ app.post('/add-new-address', (req, res) => {
         res.redirect('/');
     }else {
         usersaddress.insertMany([{user_id: req.session.user_id, address: req.body.newAddress}], err => {
-            res.redirect('/user-information/' + req.session.user_id);
+            res.redirect('/user-information');
         })
     }
 })
@@ -763,7 +762,7 @@ app.post('/update-user-information', (req, res) => {
                         const thirdUpdate = (arr) => {
                             usersaddress.updateOne({user_id: req.session.user_id, address: {$nin: arr}}, {address: req.body.address3}, {useFindAndModify: false})
                             .exec(err => {
-                                res.redirect('/user-information/'+req.session.user_id)
+                                res.redirect('/user-information')
                             })
                         }
                         const secondUpdate = (arr) => {
@@ -782,7 +781,7 @@ app.post('/update-user-information', (req, res) => {
                     const secondUpdate = (arr) => {
                         usersaddress.updateOne({user_id: req.session.user_id, address: {$nin: arr}}, {address: req.body.address2}, {useFindAndModify: false})
                         .exec(err => {
-                            res.redirect('/user-information/'+req.session.user_id)
+                            res.redirect('/user-information')
                         })
                     }
                     usersaddress.updateOne({user_id: req.session.user_id}, {address: req.body.address1}, {useFindAndModify: false})
@@ -792,7 +791,7 @@ app.post('/update-user-information', (req, res) => {
                 }else if(req.body.address1) {
                     usersaddress.updateOne({user_id: req.session.user_id}, {address: req.body.address1}, {useFindAndModify: false})
                     .exec(err => {
-                        res.redirect('/user-information/'+req.session.user_id)
+                        res.redirect('/user-information')
                     })
                 }
             }
@@ -802,7 +801,7 @@ app.post('/update-user-information', (req, res) => {
 
 
 //Add product route.
-app.all('/add-product/:id', (req, res) => {
+app.all('/add-product', (req, res) => {
     if(!req.session.username) {
         res.redirect('/');
     }else {
@@ -818,9 +817,9 @@ app.all('/add-product/:id', (req, res) => {
                     images.forEach((image, index) => {
                         let path = 'public/product-images-uploaded/'
                         let newName;
-                        newName = req.params.id + '_' + math.Mathematic.random(100000, 999999) + '_' + index + '.' + image.name.split('.')[1];
+                        newName = req.session.user_id + '_' + math.Mathematic.random(100000, 999999) + '_' + index + '.' + image.name.split('.')[1];
                         while(fs.existsSync(path + newName)) {
-                            newName = req.params.id + '_' + math.Mathematic.random(100000, 999999) + '_' + index + '.' + image.name.split('.')[1];
+                            newName = req.session.user_id + '_' + math.Mathematic.random(100000, 999999) + '_' + index + '.' + image.name.split('.')[1];
                         }
                         fname.push(newName);
                         fs.renameSync(image.path, path+newName, err => {})
@@ -837,16 +836,15 @@ app.all('/add-product/:id', (req, res) => {
                         }
                     }
                     let info = fields.information.replace(/\n/g, '<br>');
-                    usersproduct.insertMany([{shop_id: req.params.id, product_image: fname, product_name: fields.name, product_information: info, product_type: arr, product_category: fields.cate}], err => {
-                        res.redirect('/manage-product/'+req.params.id);
+                    usersproduct.insertMany([{shop_id: req.session.user_id, product_image: fname, product_name: fields.name, product_information: info, product_type: arr, product_category: fields.cate}], err => {
+                        res.redirect('/manage-product');
                     })
                 }
             })
         }else {
-            cart.find({buyer_id: req.params.id, in_payment: false})
+            cart.find({buyer_id: req.session.user_id, in_payment: false})
             .exec((err, result) => {
                 res.render('add-product', {
-                    user_id: req.params.id,
                     username: req.session.username,
                     number: result.length
                 })
@@ -857,19 +855,18 @@ app.all('/add-product/:id', (req, res) => {
 
 
 //Manage products route.
-app.get('/manage-product/:id', (req, res) => {
+app.get('/manage-product', (req, res) => {
     if(!req.session.username) {
         res.redirect('/');
     }else {
-        usersproduct.find({shop_id: req.params.id})
+        usersproduct.find({shop_id: req.session.user_id})
         .select('product_name product_sold product_category')
         .sort({_id: -1})
         .exec((err, data) => {
             if(!err) {
-                cart.find({buyer_id: req.params.id, in_payment: false})
+                cart.find({buyer_id: req.session.user_id, in_payment: false})
                 .exec((err, result) => {
                     res.render('manage-product', {
-                        user_id: req.params.id,
                         username: req.session.username,
                         data: data,
                         number: result.length
@@ -889,7 +886,6 @@ app.get('/edit-product/:id', (req, res) => {
             if(!err) {
                 res.render('edit-product', {
                     username: req.session.username,
-                    user_id: req.session.user_id,
                     data: data
                 })
             }
@@ -996,7 +992,7 @@ app.get('/delete-product/:id', (req, res) => {
                     fs.unlink(path+i, err => {})
                 }
                 cart.deleteMany({product_id: data._id})
-                .exec(err => (req.session.username === "KoalaAdmin") ? res.redirect('/admin-manage-products'): res.redirect('/manage-product/'+req.session.user_id));
+                .exec(err => (req.session.username === "KoalaAdmin") ? res.redirect('/admin-manage-products'): res.redirect('/manage-product'));
             }
         })
     }
@@ -1004,16 +1000,15 @@ app.get('/delete-product/:id', (req, res) => {
 
 
 //Cart route.
-app.get('/cart/:id', (req, res) => {
+app.get('/cart', (req, res) => {
     if(!req.session.username) {
         res.redirect('/');
     }else {
-        cart.find({buyer_id: req.params.id, in_payment: false})
+        cart.find({buyer_id: req.session.user_id, in_payment: false})
         .sort({_id: -1})
         .exec((err, dataFromCart) => {
             if(!err) {
                 res.render('cart', {
-                    user_id: req.params.id,
                     username: req.session.username,
                     dataFromCart: dataFromCart,
                     number: dataFromCart.length
@@ -1023,7 +1018,7 @@ app.get('/cart/:id', (req, res) => {
     }
 })
 
-app.post('/add-to-cart/:id', (req, res) => {
+app.post('/add-to-cart', (req, res) => {
     if(!req.session.username) {
         res.redirect('/');
     }else {
@@ -1123,7 +1118,7 @@ app.post('/delete-in-cart', (req, res) => {
 })
 
 //**************************************
-app.post('/buy-product/:id', (req, res) => {
+app.post('/buy-product', (req, res) => {
     if(!req.session.username) {
         res.redirect('/');
     }else {
@@ -1377,7 +1372,7 @@ app.post('/cart/payment/transfer', (req, res) => {
                             buyer_id: req.session.user_id,
                             result: sum
                         }], err => {
-                            res.redirect('/payment-list/' + req.session.user_id), 500;
+                            res.redirect('/payment-list');
                         })
                     }
                 })
@@ -1388,19 +1383,18 @@ app.post('/cart/payment/transfer', (req, res) => {
 
 
 //Payment route.
-app.get('/payment-list/:id', (req, res) => {
+app.get('/payment-list', (req, res) => {
     if(!req.session.username) {
         res.redirect('/');
     }else {
-        transfer.find({buyer_id: req.params.id})
+        transfer.find({buyer_id: req.session.user_id})
         .sort({buy_time: -1})
         .exec((err, data) => {
             if(!err) {
-                cart.find({buyer_id: req.params.id, in_payment: false})
+                cart.find({buyer_id: req.session.user_id, in_payment: false})
                 .select('_id')
                 .exec((err, dataFromCart) => {
                     res.render('payment-list', {
-                        user_id: req.params.id,
                         username: req.session.username,
                         data: data,
                         number: dataFromCart.length
@@ -1417,7 +1411,7 @@ app.post('/cancel-order', (req, res) => {
     }else {
         function redirect() {
             res.send({
-                url: '/payment-list/' + req.session.user_id
+                url: '/payment-list'
             })
         }
         let transfer_id = req.body.transfer_id;
@@ -1514,7 +1508,6 @@ app.get('/payment-list/view-payment-products/:transferId', (req, res) => {
                         .exec((err, dataFromCart) => {
                             if(!err) {
                                 res.render('view-payment-products', {
-                                    user_id: req.params.id,
                                     username: req.session.username,
                                     data: result,
                                     transfer: req.params.transferId,
@@ -1531,7 +1524,7 @@ app.get('/payment-list/view-payment-products/:transferId', (req, res) => {
 
 
 //Order route.
-app.get('/order/:id', (req, res) => {
+app.get('/order', (req, res) => {
     if(!req.session.username) {
         res.redirect('/');
     }else {
@@ -1539,10 +1532,9 @@ app.get('/order/:id', (req, res) => {
         .sort({buy_time: -1})
         .exec((err, data) => {
             if(!err) {
-                cart.find({buyer_id: req.params.id, in_payment: false})
+                cart.find({buyer_id: req.session.user_id, in_payment: false})
                 .exec((err, dataFromCart) => {
                     res.render('order', {
-                        user_id: req.params.id,
                         username: req.session.username,
                         data: data,
                         number: dataFromCart.length
@@ -1558,7 +1550,7 @@ app.post('/set-status/:id', (req, res) => {
         cart.findByIdAndUpdate(req.params.id, {status: req.body['status-' + req.params.id], shipped_time: new Date}, {useFindAndModify: false})
         .exec(err => {
             if(!err) {
-                res.redirect('/order/'+req.session.user_id);
+                res.redirect('/order');
             }
         })
         return;
@@ -1566,7 +1558,7 @@ app.post('/set-status/:id', (req, res) => {
     cart.findByIdAndUpdate(req.params.id, {status: req.body['status-' + req.params.id]}, {useFindAndModify: false})
     .exec(err => {
         if(!err) {
-            res.redirect('/order/'+req.session.user_id);
+            res.redirect('/order');
         }
     })
 })

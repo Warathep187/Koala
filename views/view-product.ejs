@@ -29,9 +29,8 @@
     <div class="separate">
 
     </div>
-    <% if(locals.user_id) { %>
+    <% if(locals.username) { %>
         <input type="hidden" name="productId" value="<%= product_id %>">
-        <input type="hidden" name="userId" value="<%= user_id %>">
     <% } %>
     <%- include('nav-for-pages') %>
     <div class="container-fluid">
@@ -135,7 +134,7 @@
                             </div>
                         </div>
                     </div>
-                    <% if(locals.user_id && user_id != data.shop_id) { %>
+                    <% if(locals.username && user_id != data.shop_id) { %>
                         <div class="menu text-start">
                             <button id="add-to-cart" type="button" class="btn btn-warning px-4 me-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop-cart"><img style="width: 30px;" src="/another-images/carts.png"></button>
                             <button id="buy" type="button" class="btn btn-primary fs-5 px-4" data-bs-toggle="modal" data-bs-target="#staticBackdrop-buy">Buy</button>

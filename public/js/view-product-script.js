@@ -2,6 +2,7 @@ $(function() {
     let text = $('#data-info').text();
     let number;
     let price;
+    let isSoldOut = false;
     $('#data-info').html(text);
     $('[name=option]').click(() => {
         number = $('[name=option]:checked').val().split(' ')[2];
@@ -10,6 +11,7 @@ $(function() {
         if(number == 0) {
             $('#add-btn').css('display', 'none');
             $('.show-number').append('<div class="w-75 text-center mx-auto"><p class="fs-4 text-danger">This product has sold out.</p></div>');
+            isSoldOut = true;
         }else {
             $('.show-number').html('');
             $('#add-btn').css('display', 'block');
@@ -34,6 +36,9 @@ $(function() {
         }else if($('[name=hidden]').val() == "no-type") {
             choose = true;
         }
+        if(isSoldOut) {
+            return;
+        }
         if(parseInt(document.getElementsByName('productNumber')[0].value) > parseInt(document.getElementsByName('productNumber')[0].max) || parseInt(document.getElementsByName('productNumber')[0].value) <= 0 || document.getElementsByName('productNumber')[0].value == '' || parseInt(document.getElementsByName('productNumber')[0].value) == NaN) {
             numProduct = false;
             document.getElementsByName('productNumber')[0].className += ' is-invalid';
@@ -44,7 +49,7 @@ $(function() {
         if(choose && numProduct) {
             if($('[name=hidden]').val() == "has-type"){
                 $.ajax({
-                    url: '/add-to-cart/' + $('[name=userId]').val(),
+                    url: '/add-to-cart',
                     type: 'POST',
                     data: {
                         product_id: $('[name=productId]').val(),
@@ -66,7 +71,7 @@ $(function() {
             }
             else if($('[name=hidden]').val() == "no-type") {
                 $.ajax({
-                    url: '/add-to-cart/' + $('[name=userId]').val(),
+                    url: '/add-to-cart',
                     type: 'POST',
                     data: {
                         product_id: $('[name=productId]').val(),
@@ -102,6 +107,9 @@ $(function() {
         }else if($('[name=hidden]').val() == "no-type") {
             choose = true;
         }
+        if(isSoldOut) {
+            return;
+        }
         if(parseInt(document.getElementsByName('productNumber')[1].value) > parseInt(document.getElementsByName('productNumber')[1].max) || parseInt(document.getElementsByName('productNumber')[1].value) <= 0 || document.getElementsByName('productNumber')[1].value == '' || parseInt(document.getElementsByName('productNumber')[1].value) == NaN) {
             numProduct = false;
             document.getElementsByName('productNumber')[1].className += " is-invalid";
@@ -112,7 +120,7 @@ $(function() {
         if(choose && numProduct) {
             if($('[name=hidden]').val() == "has-type"){
                 $.ajax({
-                    url: '/buy-product/' + $('[name=userId]').val(),
+                    url: '/buy-product',
                     type: 'POST',
                     data: {
                         product_id: $('[name=productId]').val(),
@@ -127,7 +135,7 @@ $(function() {
             }
             else if($('[name=hidden]').val() == "no-type") {
                 $.ajax({
-                    url: '/buy-product/' + $('[name=userId]').val(),
+                    url: '/buy-product',
                     type: 'POST',
                     data: {
                         product_id: $('[name=productId]').val(),
